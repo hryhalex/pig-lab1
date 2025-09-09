@@ -255,18 +255,15 @@ input[type="number"] {
     </div>
 
     <script>
-        // Глобальные переменные для хранения текущего цвета
         let currentColor = {
             r: 0, g: 0, b: 0,
             c: 0, m: 0, y: 0, k: 100,
             h: 0, l: 0, s: 0
         };
-        
-        // Элементы DOM
+
         const colorDisplay = document.getElementById('colorDisplay');
         const palette = document.getElementById('palette');
-        
-        // Ползунки и поля ввода
+
         const rSlider = document.getElementById('r');
         const gSlider = document.getElementById('g');
         const bSlider = document.getElementById('b');
@@ -290,8 +287,7 @@ input[type="number"] {
         const lInput = document.getElementById('lValue');
         const sInput = document.getElementById('sValue');
         
-        // Предупреждения
-        const warnings = {
+            const warnings = {
             r: document.getElementById('rWarning'),
             g: document.getElementById('gWarning'),
             b: document.getElementById('bWarning'),
@@ -304,20 +300,18 @@ input[type="number"] {
             s: document.getElementById('sWarning')
         };
         
-        // Создание палитры цветов
-        // Создание палитры цветов
-// Создание палитры цветов (автоматическая генерация)
+
 function createPalette() {
-    const stepsHue = 36;   // количество шагов по кругу оттенков (360/36 = 10° шаг)
-    const stepsLight = 4;  // уровни светлоты
-    const stepsSat = 3;    // уровни насыщенности
+    const stepsHue = 36;   
+    const stepsLight = 4;  
+    const stepsSat = 3;    
 
     for (let s = 0; s < stepsSat; s++) {
         for (let l = 1; l <= stepsLight; l++) {
             for (let h = 0; h < stepsHue; h++) {
                 const hue = Math.round((360 / stepsHue) * h);
-                const lightness = 25 + l * 15; // от тёмных к светлым
-                const saturation = 40 + s * 30; // разные уровни насыщенности
+                const lightness = 25 + l * 15; 
+                const saturation = 40 + s * 30; 
                 const color = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 
                 const swatch = document.createElement('div');
@@ -333,17 +327,14 @@ function createPalette() {
     }
 }
 
-// Вспомогательная функция: переводит hsl(...) в hex
+
 function rgbToHexFromCss(cssColor) {
     const ctx = document.createElement("canvas").getContext("2d");
     ctx.fillStyle = cssColor;
-    return ctx.fillStyle; // вернёт в формате hex
+    return ctx.fillStyle; 
 }
 
 ;
-        
-        
-        // Конвертация HEX в RGB
         function hexToRgb(hex) {
             const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
             return result ? {
@@ -352,8 +343,7 @@ function rgbToHexFromCss(cssColor) {
                 b: parseInt(result[3], 16)
             } : { r: 0, g: 0, b: 0 };
         }
-        
-        // Конвертация RGB в HEX
+    
         function rgbToHex(r, g, b) {
             return '#' + [r, g, b].map(x => {
                 const hex = Math.max(0, Math.min(255, Math.round(x))).toString(16);
@@ -361,7 +351,6 @@ function rgbToHexFromCss(cssColor) {
             }).join('');
         }
         
-        // Конвертация RGB в CMYK
         function rgbToCmyk(r, g, b) {
             r = r / 255;
             g = g / 255;
@@ -384,7 +373,6 @@ function rgbToHexFromCss(cssColor) {
             };
         }
         
-        // Конвертация CMYK в RGB
         function cmykToRgb(c, m, y, k) {
             c = c / 100;
             m = m / 100;
@@ -402,7 +390,6 @@ function rgbToHexFromCss(cssColor) {
             };
         }
         
-        // Конвертация RGB в HLS
         function rgbToHls(r, g, b) {
             r = r / 255;
             g = g / 255;
@@ -413,7 +400,7 @@ function rgbToHexFromCss(cssColor) {
             let h, s, l = (max + min) / 2;
             
             if (max === min) {
-                h = s = 0; // ахроматический
+                h = s = 0; 
             } else {
                 const d = max - min;
                 s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
@@ -434,7 +421,6 @@ function rgbToHexFromCss(cssColor) {
             };
         }
         
-        // Конвертация HLS в RGB
         function hlsToRgb(h, l, s) {
             h = h / 360;
             l = l / 100;
@@ -443,7 +429,7 @@ function rgbToHexFromCss(cssColor) {
             let r, g, b;
             
             if (s === 0) {
-                r = g = b = l; // ахроматический
+                r = g = b = l; 
             } else {
                 const hue2rgb = (p, q, t) => {
                     if (t < 0) t += 1;
@@ -469,12 +455,10 @@ function rgbToHexFromCss(cssColor) {
             };
         }
         
-        // Обновление интерфейса на основе текущего цвета
         function updateUI() {
-            // Обновление дисплея цвета
+
             colorDisplay.style.backgroundColor = rgbToHex(currentColor.r, currentColor.g, currentColor.b);
             
-            // Обновление RGB полей
             rSlider.value = currentColor.r;
             gSlider.value = currentColor.g;
             bSlider.value = currentColor.b;
@@ -482,7 +466,6 @@ function rgbToHexFromCss(cssColor) {
             gInput.value = currentColor.g;
             bInput.value = currentColor.b;
             
-            // Обновление CMYK полей
             cSlider.value = currentColor.c;
             mSlider.value = currentColor.m;
             ySlider.value = currentColor.y;
@@ -492,7 +475,6 @@ function rgbToHexFromCss(cssColor) {
             yInput.value = currentColor.y;
             kInput.value = currentColor.k;
             
-            // Обновление HLS полей
             hSlider.value = currentColor.h;
             lSlider.value = currentColor.l;
             sSlider.value = currentColor.s;
@@ -501,95 +483,75 @@ function rgbToHexFromCss(cssColor) {
             sInput.value = currentColor.s;
         }
         
-        // Обновление цвета из RGB значений
         function updateColorFromRgb(r, g, b) {
-            // Проверка и корректировка значений
             const validatedR = clampValue(r, 0, 255, 'r');
             const validatedG = clampValue(g, 0, 255, 'g');
             const validatedB = clampValue(b, 0, 255, 'b');
             
-            // Обновление RGB
             currentColor.r = validatedR.value;
             currentColor.g = validatedG.value;
             currentColor.b = validatedB.value;
             
-            // Конвертация в CMYK
             const cmyk = rgbToCmyk(validatedR.value, validatedG.value, validatedB.value);
             currentColor.c = cmyk.c;
             currentColor.m = cmyk.m;
             currentColor.y = cmyk.y;
             currentColor.k = cmyk.k;
             
-            // Конвертация в HLS
             const hls = rgbToHls(validatedR.value, validatedG.value, validatedB.value);
             currentColor.h = hls.h;
             currentColor.l = hls.l;
             currentColor.s = hls.s;
             
-            // Обновление интерфейса
             updateUI();
         }
-        
-        // Обновление цвета из CMYK значений
         function updateColorFromCmyk(c, m, y, k) {
-            // Проверка и корректировка значений
             const validatedC = clampValue(c, 0, 100, 'c');
             const validatedM = clampValue(m, 0, 100, 'm');
             const validatedY = clampValue(y, 0, 100, 'y');
             const validatedK = clampValue(k, 0, 100, 'k');
             
-            // Обновление CMYK
             currentColor.c = validatedC.value;
             currentColor.m = validatedM.value;
             currentColor.y = validatedY.value;
             currentColor.k = validatedK.value;
             
-            // Конвертация в RGB
             const rgb = cmykToRgb(validatedC.value, validatedM.value, validatedY.value, validatedK.value);
             currentColor.r = rgb.r;
             currentColor.g = rgb.g;
             currentColor.b = rgb.b;
             
-            // Конвертация в HLS
             const hls = rgbToHls(rgb.r, rgb.g, rgb.b);
             currentColor.h = hls.h;
             currentColor.l = hls.l;
             currentColor.s = hls.s;
             
-            // Обновление интерфейса
             updateUI();
         }
         
-        // Обновление цвета из HLS значений
         function updateColorFromHls(h, l, s) {
-            // Проверка и корректировка значений
             const validatedH = clampValue(h, 0, 360, 'h');
             const validatedL = clampValue(l, 0, 100, 'l');
             const validatedS = clampValue(s, 0, 100, 's');
             
-            // Обновление HLS
             currentColor.h = validatedH.value;
             currentColor.l = validatedL.value;
             currentColor.s = validatedS.value;
             
-            // Конвертация в RGB
             const rgb = hlsToRgb(validatedH.value, validatedL.value, validatedS.value);
             currentColor.r = rgb.r;
             currentColor.g = rgb.g;
             currentColor.b = rgb.b;
             
-            // Конвертация в CMYK
             const cmyk = rgbToCmyk(rgb.r, rgb.g, rgb.b);
             currentColor.c = cmyk.c;
             currentColor.m = cmyk.m;
             currentColor.y = cmyk.y;
             currentColor.k = cmyk.k;
             
-            // Обновление интерфейса
             updateUI();
         }
         
-        // Проверка и ограничение значения в заданном диапазоне
         function clampValue(value, min, max, component) {
             let clamped = parseFloat(value);
             let showWarning = false;
@@ -605,21 +567,15 @@ function rgbToHexFromCss(cssColor) {
                 showWarning = true;
             }
             
-            // Показать/скрыть предупреждение
             warnings[component].style.display = showWarning ? 'block' : 'none';
             
             return { value: clamped, warning: showWarning };
         }
         
-        // Инициализация приложения
         function init() {
-            // Создание палитры
             createPalette();
-            
-            // Установка начального цвета (синий)
             updateColorFromRgb(0, 0, 255);
-            
-            // Назначение обработчиков событий для RGB
+        
             rSlider.addEventListener('input', () => updateColorFromRgb(rSlider.value, currentColor.g, currentColor.b));
             gSlider.addEventListener('input', () => updateColorFromRgb(currentColor.r, gSlider.value, currentColor.b));
             bSlider.addEventListener('input', () => updateColorFromRgb(currentColor.r, currentColor.g, bSlider.value));
@@ -627,8 +583,7 @@ function rgbToHexFromCss(cssColor) {
             rInput.addEventListener('change', () => updateColorFromRgb(rInput.value, currentColor.g, currentColor.b));
             gInput.addEventListener('change', () => updateColorFromRgb(currentColor.r, gInput.value, currentColor.b));
             bInput.addEventListener('change', () => updateColorFromRgb(currentColor.r, currentColor.g, bInput.value));
-            
-            // Назначение обработчиков событий для CMYK
+        
             cSlider.addEventListener('input', () => updateColorFromCmyk(cSlider.value, currentColor.m, currentColor.y, currentColor.k));
             mSlider.addEventListener('input', () => updateColorFromCmyk(currentColor.c, mSlider.value, currentColor.y, currentColor.k));
             ySlider.addEventListener('input', () => updateColorFromCmyk(currentColor.c, currentColor.m, ySlider.value, currentColor.k));
@@ -639,7 +594,6 @@ function rgbToHexFromCss(cssColor) {
             yInput.addEventListener('change', () => updateColorFromCmyk(currentColor.c, currentColor.m, yInput.value, currentColor.k));
             kInput.addEventListener('change', () => updateColorFromCmyk(currentColor.c, currentColor.m, currentColor.y, kInput.value));
             
-            // Назначение обработчиков событий для HLS
             hSlider.addEventListener('input', () => updateColorFromHls(hSlider.value, currentColor.l, currentColor.s));
             lSlider.addEventListener('input', () => updateColorFromHls(currentColor.h, lSlider.value, currentColor.s));
             sSlider.addEventListener('input', () => updateColorFromHls(currentColor.h, currentColor.l, sSlider.value));
@@ -649,7 +603,6 @@ function rgbToHexFromCss(cssColor) {
             sInput.addEventListener('change', () => updateColorFromHls(currentColor.h, currentColor.l, sInput.value));
         }
         
-        // Запуск приложения
         init();
     </script>
 </body>
